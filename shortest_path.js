@@ -131,8 +131,8 @@ class MinHeap{
 }
 
 const GRID_DIMENSIONS = 20;
-const DEFAULT_START = [4, 4];
-const DEFAULT_END = [GRID_DIMENSIONS - 5, GRID_DIMENSIONS - 5];
+const DEFAULT_START = [4, GRID_DIMENSIONS/2];
+const DEFAULT_END = [GRID_DIMENSIONS - 5, GRID_DIMENSIONS/2];
 const SPEP_TIME_MS = 10;
 
 let start = DEFAULT_START;
@@ -201,20 +201,26 @@ function initGrid(){
 
 
     setStart(DEFAULT_START[0], DEFAULT_START[1]);
-    setEnd(DEFAULT_END[0], DEFAULT_END[0]);
+    setEnd(DEFAULT_END[0], DEFAULT_END[1]);
 
-    // TODO: remove this and let user draw?
-    let tileElems = document.getElementsByClassName("tile");
-    for(let i = 0; i < GRID_DIMENSIONS * GRID_DIMENSIONS / 3; i++){
-        let tileElem = tileElems[Math.floor(Math.random() * tileElems.length)];
-        if(tileElem.className == "tile"){
-            if(Math.random() < 0.7)
-                tileElem.className += " walltile";
-            else
-                tileElem.className += " slowtile";
-        }
+    for(let x = start[0] - 2; x <= start[0] + 2; x++){
+        getTileElement(x, start[1] - 2).className += " walltile";
+        getTileElement(x, start[1] + 2).className += " walltile";
     }
 
+    for(let y = start[1] - 1; y <= start[1] + 1; y++){
+        getTileElement(start[0] + 2, y).className += " walltile";
+    }
+
+    for(let k = start[0] + 4; k > 2; k--){
+        getTileElement(start[0] + k, start[1] + k).className += " walltile";
+    }
+
+    for(let x = end[0] - 6; x <= end[0] - 1; x++){
+        for(let y = end[1] - 5; y <= end[1] + 2; y++){
+            getTileElement(x, y).className += " slowtile";
+        }
+    }
 }
 
 let heap = null;
