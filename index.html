@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Shortest path</title>
+    <link rel="stylesheet" type="text/css" href="shortest_path.css">
+    <script src="shortest_path.js"></script>
+</head>
+<body>
+    <div class="container">
+        <table id="grid">
+
+        </table>        
+    </div>
+    <br>
+    <div class="infobox">
+            <table class="infobox">
+                <tr><th></th><th>Tile types</th></tr>
+                <tr><td class="tile walltile example"></td><td> Wall tile - left click</td></tr>
+                <tr><td class="tile example"></td><td> Normal tile - right click</td></tr>
+                <tr><td class="tile slowtile example"></td><td> Tile with extra weight - middle click</td></tr>
+                <tr><td class="tile starttile example"></td><td> start - draggable</td>
+                <tr><td class="tile endtile example"></td><td> end - draggable</td>
+            </table>
+        </div>
+    <script>initGrid(); resetAlgorithm(); resumeAlgorithm()</script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+body{
+    margin: 0px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.infobox{
+    height: 15vmin;
+    margin: 0;
+}
+
+#grid {
+    height: 80vmin;
+    width: 80vmin;
+    margin: 0;
+    border-spacing: 1px;
+}
+
+.tile{
+    margin: 0px;
+    padding: 0px;
+    border-style: solid;
+    border-color: gray;
+    border-width: 1px;
+    background: lightgray;
+}
+
+.example{
+    width: 1em;
+    height: 1em;
+}
+
+.walltile{
+    background: black;
+}
+
+.slowtile{
+    filter: brightness(70%);
+}
+
+.candidate{
+    border-color: rgb(172, 223, 255);
+}
+
+@keyframes visitedanim{
+    from {background-color:rgb(226, 246, 255)}
+    to {background-color: rgb(172, 223, 255)}
+}
+
+.visited{
+    animation-name: visitedanim;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+    background: rgb(172, 223, 255);
+}
+
+@keyframes nopathanim{
+    from {background-color:rgb(172, 223, 255)}
+    to {background-color: rgb(255, 196, 196)}
+}
+
+.nopath{
+    animation-name: nopathanim;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate-reverse;
+    background: rgb(255, 196, 196);
+}
+
+@keyframes pathfoundanim{
+    from {background-color:rgb(172, 223, 255)}
+    to {background-color: rgb(80, 188, 255)}
+}
+
+.path{
+    animation-name: pathfoundanim;
+    animation-duration: 2s;
+    animation-iteration-count: 1;
+    border-width: 2;
+    background: rgb(80, 188, 255);
+}
+
+.starttile{
+    animation-name: none;
+    background: lightgreen;
+}
+
+.endtile{
+    animation-name: none;
+    background: lightcoral;
+}
