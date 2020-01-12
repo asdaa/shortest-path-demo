@@ -15,16 +15,28 @@
         </table>        
     </div>
     <br>
-    <div class="infobox">
-            <table class="infobox">
-                <tr><th></th><th>Tile types</th></tr>
-                <tr><td class="tile walltile example"></td><td> Wall tile - left click</td></tr>
-                <tr><td class="tile example"></td><td> Normal tile - right click</td></tr>
-                <tr><td class="tile slowtile example"></td><td> Tile with extra weight - middle click</td></tr>
-                <tr><td class="tile starttile example"></td><td> Start - draggable</td>
-                <tr><td class="tile endtile example"></td><td> End - draggable</td>
+    <div class="menu">
+        <div class="menublock">
+            <table class="algotable">
+                    <tr><td id="tilesVisitedText"></td></tr>
+                    <tr><td><label><input type="radio" checked="checked" name="radioAlgorithm" onclick="resetAlgorithm();resumeAlgorithm()">Dijkstra</label></td></tr>
+                    <tr><td><label><input type="radio" name="radioAlgorithm" onclick="resetAlgorithm();resumeAlgorithm()">A*</label></td></tr>
+                    <tr><td><label><input type="radio" name="radioAlgorithm" onclick="resetAlgorithm();resumeAlgorithm()">Greedy</label></td></tr>
+                    <tr><td><button onclick="clearGrid();">Clear grid</button></td></tr>
+
             </table>
         </div>
+        <div class="menublock">
+            <table>
+                    <tr><th></th><th>Tile types</th></tr>
+                    <tr><td class="tile walltile example"></td><td> Wall tile - left click</td></tr>
+                    <tr><td class="tile example"></td><td> Normal tile - right click</td></tr>
+                    <tr><td class="tile slowtile example"></td><td> Tile with extra weight - middle click</td></tr>
+                    <tr><td class="tile starttile example"></td><td> Start - draggable</td>
+                    <tr><td class="tile endtile example"></td><td> End - draggable</td>
+            </table>
+        </div>
+    </div>
     <script>initGrid(); resetAlgorithm(); resumeAlgorithm()</script>
 </body>
 </html>

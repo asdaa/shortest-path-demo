@@ -4,9 +4,30 @@ body{
     overflow-x: auto;
 }
 
-.infobox{
+.menu{
     height: 15vmin;
+    width: 80vmin;
     margin: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.menublock{
+    margin: 10px;
+}
+
+.algotable{
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+}
+
+button{
+    background-color: rgb(172, 223, 255);
+    border-width: 1px;
+    border-radius: 3px;
+    padding: 5px 5px;
+    text-align: center;
 }
 
 #grid {

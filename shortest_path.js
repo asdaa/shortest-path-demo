@@ -1,9 +1,43 @@
 class PathNode{
-    constructor(x, y, value, prevNode){
+    constructor(x, y, startDistance, prevNode){
         this.x = x;
         this.y = y;
-        this.value = value; // distance value, smaller is better
+        this.startDistance = startDistance; // distance from start
         this.prevNode = prevNode; // for backtracking the path
+    }
+
+    _calculateCostWithHeuristic(){
+        let radioElems = document.getElementsByName("radioAlgorithm");
+        if(radioElems[0].checked){
+            // dijkstra
+            return this.startDistance;
+        }
+        if(radioElems[1].checked){
+            // A*
+            // NOTE: This must NOT overestimate the value to end
+            return this.startDistance + Math.sqrt((end[0] - this.x) * (end[0] - this.x) + (end[1] - this.y) * (end[1] - this.y)); 
+        }
+        if(radioElems[2].checked){
+            // greedy
+            return Math.sqrt((end[0] - this.x) * (end[0] - this.x) + (end[1] - this.y) * (end[1] - this.y)); 
+        }
+    }
+
+    set startDistance(distance){
+        this._startDistance = distance; 
+        this._value = this._calculateCostWithHeuristic();
+    }
+
+    get startDistance(){
+        return this._startDistance;
+    }
+
+    get value(){
+        return this._value;
+    }
+
+    set value(value){
+        this._value = value;
     }
 
     compareTo(node){
@@ -244,10 +278,27 @@ function wasVisited(node){
     return visitedNodesSet.has(node.keyStr());
 }
 
+function clearGrid(){
+    let gridElem = document.getElementById("grid");
+    let html = gridElem.innerHTML;
+    html = html.replace(/ walltile/g, "");
+    html = html.replace(/ slowtile/g, "");
+    gridElem.innerHTML = html;
+
+    resetAlgorithm();
+}
+
+function updateTilesVisitedText(){
+    let wallElems = document.querySelectorAll("#grid .walltile");
+    let visitableElemCount = GRID_DIMENSIONS * GRID_DIMENSIONS - wallElems.length;
+    let elem = document.getElementById("tilesVisitedText");
+    elem.innerHTML = "Tiles visited: <b>" + visitedNodesSet.size + "/" + visitableElemCount +"</b>";
+}
+
 function resetAlgorithm(){
     pauseAlgorithm();
 
-    // a rather dirty way to reset the grid
+    // a rather dirty way to reset the status of grid elements
     let gridElem = document.getElementById("grid");
     let html = gridElem.innerHTML;
     html = html.replace(/ candidate/g, "");
@@ -261,7 +312,9 @@ function resetAlgorithm(){
     
     let firstNode = new PathNode(start[0], start[1], 0, null);
     addOrUpdateHeap(firstNode);
+    updateTilesVisitedText();
 }
+
 function pauseAlgorithm(){
     if(interval != null)
         clearInterval(interval);
@@ -283,6 +336,7 @@ function visitNext(){
     }
     let node = heap.extract();
     addToVisited(node);
+    updateTilesVisitedText();
 
     if(node.x == end[0] && node.y == end[1]){
         console.log("Path found");
@@ -301,44 +355,44 @@ function visitNext(){
 
 function addAdjacentNodes(node){
     if(node.y > 0 && !isWall(node.x, node.y - 1)){
-        let upNode = new PathNode(node.x, node.y-1, node.value, node);
+        let upNode = new PathNode(node.x, node.y-1, node.startDistance, node);
         if(isSlow(node.x, node.y-1))
-            upNode.value += 5;
+            upNode.startDistance += 5;
         else
-            upNode.value += 1;
+            upNode.startDistance += 1;
         if(!wasVisited(upNode)){
             addOrUpdateHeap(upNode)
         }
     }
 
     if(node.y < GRID_DIMENSIONS - 1 && !isWall(node.x, node.y + 1)){
-        let downNode = new PathNode(node.x, node.y+1, node.value, node);
+        let downNode = new PathNode(node.x, node.y+1, node.startDistance, node);
         if(isSlow(node.x, node.y+1))
-            downNode.value += 5;
+            downNode.startDistance += 5;
         else
-            downNode.value += 1;
+            downNode.startDistance += 1;
         if(!wasVisited(downNode)){
             addOrUpdateHeap(downNode)
         }
     }
 
     if(node.x > 0 && !isWall(node.x - 1, node.y)){
-        let leftNode = new PathNode(node.x-1, node.y, node.value, node);
+        let leftNode = new PathNode(node.x-1, node.y, node.startDistance, node);
         if(isSlow(node.x-1, node.y))
-            leftNode.value += 5;
+            leftNode.startDistance += 5;
         else
-            leftNode.value += 1;
+            leftNode.startDistance += 1;
         if(!wasVisited(leftNode)){
             addOrUpdateHeap(leftNode)
         }
     }
 
     if(node.x < GRID_DIMENSIONS - 1 && !isWall(node.x + 1, node.y)){
-        let rightNode = new PathNode(node.x+1, node.y, node.value, node);
+        let rightNode = new PathNode(node.x+1, node.y, node.startDistance, node);
         if(isSlow(node.x+1, node.y))
-            rightNode.value += 5;
+            rightNode.startDistance += 5;
         else
-            rightNode.value += 1;
+            rightNode.startDistance += 1;
         if(!wasVisited(rightNode)){
             addOrUpdateHeap(rightNode)
         }
@@ -351,11 +405,11 @@ function addDiagonalNodes(node){
 
     if(node.x > 0 && node.y > 0 
         && !isWall(node.x-1, node.y-1) && !isWall(node.x-1, node.y) && !isWall(node.x, node.y-1)){
-        let upleft = new PathNode(node.x-1, node.y-1, node.value, node);
+        let upleft = new PathNode(node.x-1, node.y-1, node.startDistance, node);
         if(isSlow(node.x-1, node.y-1))
-            upleft.value += sqrt50;
+            upleft.startDistance += sqrt50;
         else
-            upleft.value += sqrt2;
+            upleft.startDistance += sqrt2;
         if(!wasVisited(upleft)){
             addOrUpdateHeap(upleft)
         }
@@ -363,11 +417,11 @@ function addDiagonalNodes(node){
 
     if(node.x < GRID_DIMENSIONS - 1 && node.y < GRID_DIMENSIONS - 1 
         && !isWall(node.x+1, node.y+1) && !isWall(node.x+1, node.y) && !isWall(node.x, node.y+1)){
-        let downright = new PathNode(node.x+1, node.y+1, node.value, node);
+        let downright = new PathNode(node.x+1, node.y+1, node.startDistance, node);
         if(isSlow(node.x+1, node.y+1))
-            downright.value += sqrt50;
+            downright.startDistance += sqrt50;
         else
-            downright.value += sqrt2;
+            downright.startDistance += sqrt2;
         if(!wasVisited(downright)){
             addOrUpdateHeap(downright)
         }
@@ -375,11 +429,11 @@ function addDiagonalNodes(node){
 
     if(node.x < GRID_DIMENSIONS - 1 && node.y > 0 
         && !isWall(node.x+1, node.y-1) && !isWall(node.x+1, node.y) && !isWall(node.x, node.y-1)){
-        let upright = new PathNode(node.x+1, node.y-1, node.value, node);
+        let upright = new PathNode(node.x+1, node.y-1, node.startDistance, node);
         if(isSlow(node.x+1, node.y-1))
-            upright.value += sqrt50;
+            upright.startDistance += sqrt50;
         else
-            upright.value += sqrt2;
+            upright.startDistance += sqrt2;
         if(!wasVisited(upright)){
             addOrUpdateHeap(upright)
         }
@@ -387,11 +441,11 @@ function addDiagonalNodes(node){
 
     if(node.x > 0 && node.y < GRID_DIMENSIONS - 1 
         && !isWall(node.x-1, node.y+1) && !isWall(node.x-1, node.y) && !isWall(node.x, node.y+1)){
-        let downleft = new PathNode(node.x-1, node.y+1, node.value, node);
+        let downleft = new PathNode(node.x-1, node.y+1, node.startDistance, node);
         if(isSlow(node.x-1, node.y+1))
-            downleft.value += sqrt50;
+            downleft.startDistance += sqrt50;
         else
-            downleft.value += sqrt2;
+            downleft.startDistance += sqrt2;
         if(!wasVisited(downleft)){
             addOrUpdateHeap(downleft)
         }
