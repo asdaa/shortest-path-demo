@@ -69,15 +69,15 @@ body{
 
 @keyframes pathfoundanim{
     from {background-color:rgb(172, 223, 255)}
-    to {background-color: rgb(80, 188, 255)}
+    to {background-color: rgb(65, 182, 255)}
 }
 
 .path{
     animation-name: pathfoundanim;
     animation-duration: 2s;
     animation-iteration-count: 1;
-    border-width: 2;
-    background: rgb(80, 188, 255);
+    border-color: rgb(0, 61, 99);
+    background: rgb(65, 182, 255);
 }
 
 .starttile{
