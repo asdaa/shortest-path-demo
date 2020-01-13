@@ -1,3 +1,5 @@
+// TODO: test to compare results of dijkstra & A*
+
 class PathNode{
     constructor(x, y, startDistance, prevNode){
         this.x = x;
@@ -137,7 +139,7 @@ class MinHeap{
         if(this.contains(node)){
             let id = this._keyToIndex[node.keyStr()];
             if(node.value < this._arr[id].value){
-                this._arr[id].value = node.value;
+                this._arr[id] = node; 
                 // need to check if the new value puts the node's value below its parent
                 this._siftUp(id);
             }
@@ -501,3 +503,4 @@ function mouseMove(e){
     }
 
 }
+
